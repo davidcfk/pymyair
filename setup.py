@@ -34,7 +34,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author="Sam Richards",
     author_email='me@smallsam.com',
-    url='https://github.com/smallsam/pymyair',
+    url='https://github.com/davidcfk/pymyair.git',
     packages=find_packages(include=['pymyair']),
     entry_points={
         'console_scripts': [

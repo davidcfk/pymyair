@@ -13,7 +13,7 @@ import json
 import time
 
 FAN_MAP = {'low': 1, 'medium': 2, 'high': 3, 'auto': 4}
-MODE_MAP = {'cool': 1, 'heat': 2, 'fan': 3, 'dry': 5}
+MODE_MAP = {'cool': 1, 'heat': 2, 'vent': 3, 'dry': 5}
 
 # TODO: check fan mode (docs say vent, is it the same?)
 
@@ -118,6 +118,7 @@ class MyAir(object):
 
         if state is not None and state_value:
             setjson += "\"state\":\"%s\"" % state_value
+            self.system['aircons'][self._aircon]['zones'][zoneid]['state'] = state_value
 
         if self.system['aircons'][self._aircon]['zones'][zoneid]['type'] > 0:
             # temperature sensor available
@@ -128,16 +129,17 @@ class MyAir(object):
                 if state:
                     setjson += ","
                 setjson += "\"setTemp\":%d" % set_temp
+                self.system['aircons'][self._aircon]['zones'][zoneid]['setTemp'] = set_temp # Update data structure
             else:
                 raise Exception(
-                    "temp needs to be in range 16-32, temp: %s" %
-                    set_temp)
+                    "temp needs to be in range 16-32, temp: %s" % set_temp)
         else:
             # percentage set value for zone
             if value:
                 if state:
                     setjson += ","
                 setjson += "\"value\":%d" % value
+                self.system['aircons'][self._aircon]['zones'][zoneid]['value'] = value
 
         setjson += "}}}}"
         self._request("setAircon?json=%s" % setjson)
